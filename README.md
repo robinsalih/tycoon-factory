@@ -53,7 +53,7 @@ backend side.
 
 ## Submission
 - Create an account at **GitLab** (it's free)
-- Fork the repository `rocs-test`.
+- Fork the repository `rocs-hiring-test-v2`.
 - Please make your repository private and add @ryanairLabs account as 'developer'
 - We want to see the evolution of your code, so meaningful commits are welcome.
 - Please note that the application will be executed on other machines, so don't keep local references.
