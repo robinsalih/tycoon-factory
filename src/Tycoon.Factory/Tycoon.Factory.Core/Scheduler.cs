@@ -1,10 +1,22 @@
 ﻿using Tycoon.Factory.Core.Interfaces;
+using Tycoon.Factory.Core.Model;
 
 namespace Tycoon.Factory.Core;
 
 public class Scheduler : IScheduler
 {
-    public Task ScheduleActivity(int activityId, DateTimeOffset start, DateTimeOffset end, IEnumerable<int> workerIds)
+    private readonly IAssignmentRepository _assignmentRepository;
+    private readonly IWorkerRepository _workerRepository;
+    private readonly IActivityRepository _activityRepository;
+
+    public Scheduler(IAssignmentRepository assignmentRepository, IWorkerRepository workerRepository, IActivityRepository activityRepository)
+    {
+        _assignmentRepository = assignmentRepository;
+        _workerRepository = workerRepository;
+        _activityRepository = activityRepository;
+    }
+
+    public Task<Assignment> ScheduleActivity(int activityId, DateTimeOffset start, DateTimeOffset end, IEnumerable<int> workerIds)
     {
         throw new NotImplementedException();
     }

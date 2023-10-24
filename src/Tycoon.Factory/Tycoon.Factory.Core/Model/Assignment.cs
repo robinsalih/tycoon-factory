@@ -1,3 +1,3 @@
 ﻿namespace Tycoon.Factory.Core.Model;
 
-public record Assignment(int Id, int ActivityId, DateTimeOffset Start, DateTimeOffset End, IEnumerable<int> WorkerIds);
+public record Assignment(int Id, ActivityDefinition activity, DateTimeOffset Start, DateTimeOffset End, IEnumerable<Worker> workers);

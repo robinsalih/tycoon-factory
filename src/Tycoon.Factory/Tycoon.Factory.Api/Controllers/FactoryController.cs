@@ -17,7 +17,7 @@ public class FactoryController : ControllerBase
     [HttpPost("api/schedule")]
     public async Task<IActionResult> Schedule([FromBody] ScheduleRequest request)
     {
-        await _scheduler.ScheduleActivity(request.ActivityType, request.Start, request.End, request.Workers);
-        return Ok();
+        var result = await _scheduler.ScheduleActivity(request.ActivityType, request.Start, request.End, request.Workers);
+        return Ok(result);
     }
 }
