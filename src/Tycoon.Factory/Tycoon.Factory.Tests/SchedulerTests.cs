@@ -5,6 +5,7 @@ using Tycoon.Factory.Core.Scheduling;
 
 namespace Tycoon.Factory.Tests
 {
+
     public class SchedulerTests
     {
         private readonly Scheduler _sut;
@@ -16,7 +17,6 @@ namespace Tycoon.Factory.Tests
         private static readonly DateTimeOffset OneAm = new(2023, 10, 24, 01, 00, 00, TimeSpan.Zero);
         private static readonly DateTimeOffset FiveAm = new(2023, 10, 24, 05, 00, 00, TimeSpan.Zero);
         private static readonly DateTimeOffset SevenAm = new(2023, 10, 24, 07, 00, 00, TimeSpan.Zero);
-        private static readonly DateTimeOffset EightAm = new(2023, 10, 24, 08, 00, 00, TimeSpan.Zero);
 
         private static readonly ActivityDefinition BuildComponent = new(1, "Build Component", false, TimeSpan.FromHours(2));
         private static readonly ActivityDefinition BuildMachine = new(2, "Build Machine", true, TimeSpan.FromHours(4));
