@@ -1,7 +1,7 @@
 using Moq;
-using Tycoon.Factory.Core;
 using Tycoon.Factory.Core.Interfaces;
 using Tycoon.Factory.Core.Model;
+using Tycoon.Factory.Core.Scheduling;
 
 namespace Tycoon.Factory.Tests
 {
@@ -30,7 +30,7 @@ namespace Tycoon.Factory.Tests
             _activityRepoMock.Setup(x => x.GetActivityDefinition(1)).ReturnsAsync(BuildComponent);
             _activityRepoMock.Setup(x => x.GetActivityDefinition(2)).ReturnsAsync(BuildMachine);
             _workerRepoMock.Setup(x => x.GetWorker(1)).ReturnsAsync(WorkerA);
-            _workerRepoMock.Setup(x => x.GetWorker(1)).ReturnsAsync(WorkerB);
+            _workerRepoMock.Setup(x => x.GetWorker(2)).ReturnsAsync(WorkerB);
 
             _sut = new(_assignmentRepoMock.Object, _workerRepoMock.Object, _activityRepoMock.Object, _checker.Object);
         }
@@ -44,7 +44,7 @@ namespace Tycoon.Factory.Tests
         [Fact]
         public async Task ShouldThrowExceptionIfStartTimeAfterEndTime()
         {
-            await Assert.ThrowsAsync<ArgumentException>(() => _sut.ScheduleActivity(1, OneAm, FiveAm, new[] {1}));
+            await Assert.ThrowsAsync<ArgumentException>(() => _sut.ScheduleActivity(1, FiveAm, OneAm, new[] {1}));
         }
 
         [Fact]
@@ -92,8 +92,8 @@ namespace Tycoon.Factory.Tests
         {
             var twoPmOneHourOffset = new DateTimeOffset(2023, 10, 24, 14, 00, 00, TimeSpan.FromHours(1));
             var onePmNoOffset = new DateTimeOffset(2023, 10, 24, 13, 00, 00, TimeSpan.Zero);
-            var assignment = new Assignment(1, BuildMachine, OneAm, onePmNoOffset, new[] { WorkerA, WorkerB });
-            _assignmentRepoMock.Setup(x => x.CreateAssignment(2, onePmNoOffset, FiveAm, new[] { 1, 2 })).ReturnsAsync(assignment);
+            var assignment = new Assignment(2, BuildMachine, OneAm, onePmNoOffset, new[] { WorkerA, WorkerB });
+            _assignmentRepoMock.Setup(x => x.CreateAssignment(2, OneAm, onePmNoOffset, new[] { 1, 2 })).ReturnsAsync(assignment);
             
             var result = await _sut.ScheduleActivity(2, OneAm, twoPmOneHourOffset, new[] { 1, 2 });
             
