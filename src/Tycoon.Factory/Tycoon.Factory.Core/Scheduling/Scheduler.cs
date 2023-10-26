@@ -41,7 +41,12 @@ public class Scheduler : IScheduler
 
         var startUtc = start.ToUniversalTime();
         var endUtc = end.ToUniversalTime();
+        var endWithRestPeriod = endUtc + activity.RestPeriod;
 
+        var existingAssignments = await _assignmentRepository.GetAllAssignments();
+        if (workers.Any(w => _checker.IsWorkerBusy(w!, startUtc, endWithRestPeriod, existingAssignments)))
+            throw new WorkerBusyException();
+        
         var assignment = await _assignmentRepository.CreateAssignment(activityId, startUtc, endUtc, workerIds);
         
         return assignment;

@@ -15,15 +15,16 @@ namespace Tycoon.Factory.Tests
 
         private static readonly DateTimeOffset OneAm = new(2023, 10, 24, 01, 00, 00, TimeSpan.Zero);
         private static readonly DateTimeOffset FiveAm = new(2023, 10, 24, 05, 00, 00, TimeSpan.Zero);
-        private static readonly DateTimeOffset SixAm = new(2023, 10, 24, 06, 00, 00, TimeSpan.Zero);
+        private static readonly DateTimeOffset SevenAm = new(2023, 10, 24, 07, 00, 00, TimeSpan.Zero);
         private static readonly DateTimeOffset EightAm = new(2023, 10, 24, 08, 00, 00, TimeSpan.Zero);
-        private static readonly DateTimeOffset TwoPmOneHourOffset = new(2023, 10, 24, 14, 00, 00, TimeSpan.FromHours(1));
 
-        private static readonly ActivityDefinition BuildComponent = new(1, "Build Component", false, 2);
-        private static readonly ActivityDefinition BuildMachine = new(2, "Build Machine", true, 4);
+        private static readonly ActivityDefinition BuildComponent = new(1, "Build Component", false, TimeSpan.FromHours(2));
+        private static readonly ActivityDefinition BuildMachine = new(2, "Build Machine", true, TimeSpan.FromHours(4));
 
         private static readonly Worker WorkerA = new(1, "A");
         private static readonly Worker WorkerB = new(2, "B");
+
+        private static readonly Assignment[] ExistingAssignments = new[] { new Assignment(1, BuildComponent, OneAm, SevenAm, new[] { WorkerA, WorkerB }) };
 
         public SchedulerTests()
         {
@@ -31,6 +32,7 @@ namespace Tycoon.Factory.Tests
             _activityRepoMock.Setup(x => x.GetActivityDefinition(2)).ReturnsAsync(BuildMachine);
             _workerRepoMock.Setup(x => x.GetWorker(1)).ReturnsAsync(WorkerA);
             _workerRepoMock.Setup(x => x.GetWorker(2)).ReturnsAsync(WorkerB);
+            _assignmentRepoMock.Setup(x => x.GetAllAssignments()).ReturnsAsync(ExistingAssignments);
 
             _sut = new(_assignmentRepoMock.Object, _workerRepoMock.Object, _activityRepoMock.Object, _checker.Object);
         }
@@ -100,10 +102,14 @@ namespace Tycoon.Factory.Tests
             Assert.Equal(assignment, result);
         }
 
-        // Worker busy
-
-        // Worker busy new task recharge
-
-        // Worker busy existing recharge
+        [Fact]
+        public async Task ShouldNotCreateTaskIfWorkerBusy()
+        {
+            var assignment = new Assignment(1, BuildComponent, OneAm, FiveAm, new[] { WorkerA });
+            _assignmentRepoMock.Setup(x => x.CreateAssignment(1, OneAm, FiveAm, new[] { 1 })).ReturnsAsync(assignment);
+            _checker.Setup(x => x.IsWorkerBusy(WorkerA, OneAm, SevenAm, ExistingAssignments)).Returns(true);
+            
+            await Assert.ThrowsAsync<WorkerBusyException>(() => _sut.ScheduleActivity(1, OneAm, FiveAm, new[] { 1 }));
+        }
     }
 }

@@ -9,4 +9,6 @@ public interface IWorkerRepository
     Task<Worker> CreateWorker(string name);
     Task DeleteWorker(int workerId);
     Task ModifyWorker(Worker worker);
+
+    // TODO: GetMutlipleWorkers would be useful
 }
