@@ -1,9 +1,7 @@
 using Moq;
-using System.ComponentModel;
 using Tycoon.Factory.Core;
 using Tycoon.Factory.Core.Interfaces;
 using Tycoon.Factory.Core.Model;
-using Xunit.Sdk;
 
 namespace Tycoon.Factory.Tests
 {
@@ -13,11 +11,13 @@ namespace Tycoon.Factory.Tests
         private readonly Mock<IWorkerRepository> _workerRepoMock = new();
         private readonly Mock<IActivityRepository> _activityRepoMock = new();
         private readonly Mock<IAssignmentRepository> _assignmentRepoMock = new();
+        private readonly Mock<IScheduleChecker> _checker = new();
 
         private static readonly DateTimeOffset OneAm = new(2023, 10, 24, 01, 00, 00, TimeSpan.Zero);
         private static readonly DateTimeOffset FiveAm = new(2023, 10, 24, 05, 00, 00, TimeSpan.Zero);
-        private static readonly DateTimeOffset FivePm = new(2023, 10, 24, 17, 00, 00, TimeSpan.Zero);
-        private static readonly DateTimeOffset NinePm = new(2023, 10, 24, 21, 00, 00, TimeSpan.Zero);
+        private static readonly DateTimeOffset SixAm = new(2023, 10, 24, 06, 00, 00, TimeSpan.Zero);
+        private static readonly DateTimeOffset EightAm = new(2023, 10, 24, 08, 00, 00, TimeSpan.Zero);
+        private static readonly DateTimeOffset TwoPmOneHourOffset = new(2023, 10, 24, 14, 00, 00, TimeSpan.FromHours(1));
 
         private static readonly ActivityDefinition BuildComponent = new(1, "Build Component", false, 2);
         private static readonly ActivityDefinition BuildMachine = new(2, "Build Machine", true, 4);
@@ -32,7 +32,7 @@ namespace Tycoon.Factory.Tests
             _workerRepoMock.Setup(x => x.GetWorker(1)).ReturnsAsync(WorkerA);
             _workerRepoMock.Setup(x => x.GetWorker(1)).ReturnsAsync(WorkerB);
 
-            _sut = new(_assignmentRepoMock.Object, _workerRepoMock.Object, _activityRepoMock.Object);
+            _sut = new(_assignmentRepoMock.Object, _workerRepoMock.Object, _activityRepoMock.Object, _checker.Object);
         }
 
         [Fact]
@@ -70,7 +70,9 @@ namespace Tycoon.Factory.Tests
         {
             var assignment = new Assignment(1, BuildComponent, OneAm, FiveAm, new[] { WorkerA });
             _assignmentRepoMock.Setup(x => x.CreateAssignment(1, OneAm, FiveAm, new[] { 1 })).ReturnsAsync(assignment);
+
             var result = await _sut.ScheduleActivity(1, OneAm, FiveAm, new[] { 1 });
+
             Assert.Equal(assignment, result);
         }
 
@@ -79,8 +81,29 @@ namespace Tycoon.Factory.Tests
         {
             var assignment = new Assignment(1, BuildMachine, OneAm, FiveAm, new[] { WorkerA, WorkerB });
             _assignmentRepoMock.Setup(x => x.CreateAssignment(2, OneAm, FiveAm, new[] { 1, 2 })).ReturnsAsync(assignment);
+
             var result = await _sut.ScheduleActivity(2, OneAm, FiveAm, new[] { 1, 2 });
+
             Assert.Equal(assignment, result);
         }
+
+        [Fact]
+        public async Task ShouldConvertAllTimesToUTC()
+        {
+            var twoPmOneHourOffset = new DateTimeOffset(2023, 10, 24, 14, 00, 00, TimeSpan.FromHours(1));
+            var onePmNoOffset = new DateTimeOffset(2023, 10, 24, 13, 00, 00, TimeSpan.Zero);
+            var assignment = new Assignment(1, BuildMachine, OneAm, onePmNoOffset, new[] { WorkerA, WorkerB });
+            _assignmentRepoMock.Setup(x => x.CreateAssignment(2, onePmNoOffset, FiveAm, new[] { 1, 2 })).ReturnsAsync(assignment);
+            
+            var result = await _sut.ScheduleActivity(2, OneAm, twoPmOneHourOffset, new[] { 1, 2 });
+            
+            Assert.Equal(assignment, result);
+        }
+
+        // Worker busy
+
+        // Worker busy new task recharge
+
+        // Worker busy existing recharge
     }
 }
