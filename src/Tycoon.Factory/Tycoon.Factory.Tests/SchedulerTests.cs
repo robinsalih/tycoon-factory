@@ -1,8 +1,3 @@
-using Moq;
-using Tycoon.Factory.Core.Interfaces;
-using Tycoon.Factory.Core.Model;
-using Tycoon.Factory.Core.Scheduling;
-
 namespace Tycoon.Factory.Tests
 {
 

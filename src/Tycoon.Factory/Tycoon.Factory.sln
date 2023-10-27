@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tycoon.Factory.Api", "Tycoo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tycoon.Factory.Tests", "Tycoon.Factory.Tests\Tycoon.Factory.Tests.csproj", "{4B6E55CB-2C92-46DB-8A61-E7B48AC8B6B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tycoon.Factory.Utils", "TycoonFactory.Utils\Tycoon.Factory.Utils.csproj", "{BD52BE1A-B984-4FCB-8CE4-88B6E568DB3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tycoon.Factory.Utils", "TycoonFactory.Utils\Tycoon.Factory.Utils.csproj", "{BD52BE1A-B984-4FCB-8CE4-88B6E568DB3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tycoon.Factory.Infrastructure", "Tycoon.Factory.Infrastructure\Tycoon.Factory.Infrastructure.csproj", "{044DA321-6F26-4E1C-900F-652080022E4E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{BD52BE1A-B984-4FCB-8CE4-88B6E568DB3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD52BE1A-B984-4FCB-8CE4-88B6E568DB3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD52BE1A-B984-4FCB-8CE4-88B6E568DB3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{044DA321-6F26-4E1C-900F-652080022E4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{044DA321-6F26-4E1C-900F-652080022E4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{044DA321-6F26-4E1C-900F-652080022E4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{044DA321-6F26-4E1C-900F-652080022E4E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

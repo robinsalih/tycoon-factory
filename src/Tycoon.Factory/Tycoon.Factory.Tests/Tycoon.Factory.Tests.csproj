@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tycoon.Factory.Core\Tycoon.Factory.Core.csproj" />
+    <ProjectReference Include="..\Tycoon.Factory.Infrastructure\Tycoon.Factory.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

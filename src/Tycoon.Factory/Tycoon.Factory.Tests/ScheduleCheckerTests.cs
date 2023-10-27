@@ -1,12 +1,7 @@
-﻿using System.Xml.Serialization;
-using Tycoon.Factory.Core.Model;
-using Tycoon.Factory.Core.Scheduling;
-
-namespace Tycoon.Factory.Tests
+﻿namespace Tycoon.Factory.Tests
 {
     public class ScheduleCheckerTests
     {
-
         private static readonly DateTimeOffset OneAm = new(2023, 10, 24, 01, 00, 00, TimeSpan.Zero);
         private static readonly DateTimeOffset FiveAm = new(2023, 10, 24, 05, 00, 00, TimeSpan.Zero);
         private static readonly DateTimeOffset SixAm = new(2023, 10, 24, 06, 00, 00, TimeSpan.Zero);
