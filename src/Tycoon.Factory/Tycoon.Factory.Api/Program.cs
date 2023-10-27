@@ -1,5 +1,6 @@
 using Tycoon.Factory.Api;
 using Tycoon.Factory.Core;
+using Tycoon.Factory.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +11,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IExceptionTranslator, ExceptionTranslator>();
+builder.Services.AddSingleton<PopulateData>();
 builder.Services.AddCore();
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
+app.Services.GetService<PopulateData>()!.PopulateRepos().Wait();
 
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler(new ExceptionHandlerOptions { ExceptionHandler = ExceptionHandler.HandleException });

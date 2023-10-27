@@ -10,7 +10,7 @@ namespace Tycoon.Factory.Infrastructure
 
         public Task<ActivityDefinition> CreateActivityDefinition(string name, bool multipleWorkers, int restPeriod)
         {
-            var id = ++_nextId;
+            var id = _nextId++;
             var activity = new ActivityDefinition(id, name, multipleWorkers, TimeSpan.FromHours(restPeriod));
             _data.Add(id, activity);
             return Task.FromResult(activity);

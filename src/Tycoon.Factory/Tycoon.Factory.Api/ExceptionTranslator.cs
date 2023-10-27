@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Tycoon.Factory.Core.Scheduling;
 
 namespace Tycoon.Factory.Api;
     public class ExceptionTranslator : IExceptionTranslator
@@ -12,6 +13,9 @@ namespace Tycoon.Factory.Api;
 
             case NotImplementedException:
                 return Result(StatusCodes.Status501NotImplemented, ex.Message);
+
+            case WorkerBusyException:
+                return Result(StatusCodes.Status409Conflict, ex.Message);
             
             default:
                 return Result(StatusCodes.Status500InternalServerError, ex.Message);

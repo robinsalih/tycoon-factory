@@ -6,5 +6,6 @@ namespace Tycoon.Factory.Core;
 public static class ServiceManagerExtensions
 {
     public static IServiceCollection AddCore(this IServiceCollection services) =>
-        services.AddSingleton<IScheduler, Scheduler>();
+        services.AddSingleton<IScheduler, Scheduler>()
+            .AddSingleton<IScheduleChecker, ScheduleChecker>();
 }

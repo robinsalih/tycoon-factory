@@ -10,7 +10,7 @@ namespace Tycoon.Factory.Infrastructure
         
         public Task<Worker> CreateWorker(string name)
         {
-            var id = ++_nextId;
+            var id = _nextId++;
             var worker = new Worker(id, name);
             _data.Add(id, worker);
             return Task.FromResult(worker);

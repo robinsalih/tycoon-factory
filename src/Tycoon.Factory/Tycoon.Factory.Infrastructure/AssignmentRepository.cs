@@ -21,7 +21,7 @@ namespace Tycoon.Factory.Infrastructure
 
         public async Task<Assignment> CreateAssignment(int activityId, DateTimeOffset start, DateTimeOffset end, IEnumerable<int> workerIds)
         {
-            var id = ++_nextId;
+            var id = _nextId++;
             var activity = await _activityRepository.GetActivityDefinition(activityId);
             var workers = await workerIds.SelectAsync(id => _workerRepository.GetWorker(id));
             var assignment = new Assignment(id, activity, start, end, workers);
