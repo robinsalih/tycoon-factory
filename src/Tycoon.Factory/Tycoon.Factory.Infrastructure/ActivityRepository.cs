@@ -5,29 +5,38 @@ namespace Tycoon.Factory.Infrastructure
 {
     public class ActivityRepository : IActivityRepository
     {
-        public Task<ActivityDefinition> CreateActivityDefinition(string name, bool multipleWorkers, int recoveryPeriod)
+        private readonly Dictionary<int, ActivityDefinition> _data = new();
+        private int _nextId = 1;
+
+        public Task<ActivityDefinition> CreateActivityDefinition(string name, bool multipleWorkers, int restPeriod)
         {
-            throw new NotImplementedException();
+            var id = ++_nextId;
+            var activity = new ActivityDefinition(id, name, multipleWorkers, TimeSpan.FromHours(restPeriod));
+            _data.Add(id, activity);
+            return Task.FromResult(activity);
+
         }
 
         public Task DeleteActivityDefinition(int activityId)
         {
-            throw new NotImplementedException();
+            _data.Remove(activityId);
+            return Task.CompletedTask;
         }
 
         public Task<ActivityDefinition?> GetActivityDefinition(int activityId)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(_data.TryGetValue(activityId, out var activity) ? activity : null);
         }
 
         public Task<IEnumerable<ActivityDefinition>> GetAllActivityDefinitions()
         {
-            throw new NotImplementedException();
+            return Task.FromResult((IEnumerable<ActivityDefinition>)_data.Values);
         }
 
         public Task ModifyActivityDefinition(ActivityDefinition activityDefinition)
         {
-            throw new NotImplementedException();
+            _data[activityDefinition.Id] = activityDefinition;
+            return Task.CompletedTask;
         }
     }
 }
