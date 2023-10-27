@@ -61,7 +61,7 @@ namespace Tycoon.Factory.Tests
             var workerAAssignment = new Assignment(1, BuildComponent, OneAm, FiveAm, new[] { WorkerA });
             var assignments = new[] { workerAAssignment };
 
-            Assert.True(_sut.IsWorkerBusy(WorkerA, SevenAm, Noon, assignments));
+            Assert.False(_sut.IsWorkerBusy(WorkerA, SevenAm, Noon, assignments));
         }
 
         [Fact]
